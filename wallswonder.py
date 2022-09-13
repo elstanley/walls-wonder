@@ -7,9 +7,9 @@ mockup_positions = [   (1228,1414),   (1240,788),    (1392,1100), (1296,1170),  
 mockup_transparents =  [False,         False,          False,      False,           False,        False,          False,        False,           False,        False,            True]
 
 
-def makemockup (productfinal, mockup_filename, mockup_size, mockup_position, mockup_transparent):
+def makemockup (product_filename, mockup_filename, mockup_size, mockup_position, mockup_transparent):
     mockup = Image.open ("mockups/" + mockup_filename)
-    product = Image.open ("products/" + productfinal)
+    product = Image.open ("products/" + product_filename)
     width, height = product.size
     (mockupwidth, mockupheight) = mockup_size
     if (width <= height and mockupwidth > mockupheight) or (height <= width and mockupwidth < mockupheight):
@@ -22,7 +22,7 @@ def makemockup (productfinal, mockup_filename, mockup_size, mockup_position, moc
         mockup2 = Image.open ("mockups/" + mockup_filename)
         mockup.paste(mockup2, (0, 0), mockup2)
     rgb_im = mockup.convert('RGB')
-    rgb_im.save ("outputs/" + mockup_filename + productfinal)
+    rgb_im.save ("outputs/" + mockup_filename + product_filename)
 
 # loop over each product and mockup
 products = os.listdir ("products")
