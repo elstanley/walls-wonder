@@ -2,9 +2,17 @@ from PIL import Image, ImageColor
 import os
 import numpy
 
-#productimage = Image.open ("products/productimageps.jpg")
-
-#width, height = productimage.size
+mockup_filenames = ["mockup9.jpg","pmockup2.jpg","pmockup3.jpg","pmockup4.jpg","pmockup5.jpg","pmockup6.jpg","pmockup7.jpg","pmockup8.jpg"]
+frame_corners = [
+    [(985,1547), (2827,1550), (2849,2861), (961,2861)], # mockup9
+    [(1783,725), (3616,726), (3616,3323),(1782,3322)], #pmockup2
+    [(1555,603), (2402,564), (2555,1717), (1703,1842)], #pmockup3
+    [(1722,542), (2523,544), (2523,1610), (1722,1610)], #pmockup4
+    [(2001, 582), (2935, 420), (2941, 2024), (2016, 1983)], # pmockup5
+    [(1125,1678), (1899,1685), (1991,2753), (1175,2795)], #pmockup6
+    [(1728,1363), (2390,1361), (2401,2254), (1716,2255)], #pmockup7
+    [(1796,874), (2639, 875), (2660,2028), (1784,2028)],  #pmockup8
+]
 
 def find_coeffs(pb, pa):
     matrix = []
@@ -22,13 +30,14 @@ def skewer (product_filename, mockup_filename, frame_corners):
     mockup = Image.open ("mockups/" + mockup_filename)
     productimage = Image.open ("products/" + product_filename)
     width, height = productimage.size
+    w,h = mockup.size
     coeffs = find_coeffs(
         [(0, 0), (width, 0), (width, height), (0, height)], # pb
         frame_corners # pa
         )
 
     productimage = productimage.convert('RGBA')
-    skewedimage = productimage.transform((4200, 2900), Image.Transform.PERSPECTIVE, coeffs, fillcolor=(255,255,255,0))
+    skewedimage = productimage.transform((w, h), Image.Transform.PERSPECTIVE, coeffs, fillcolor=(255,255,255,0))
 
     mockup.paste(skewedimage, (0, 0), skewedimage)
     #if (mockup_transparent):
@@ -43,7 +52,8 @@ def skewer (product_filename, mockup_filename, frame_corners):
 products = os.listdir ("products")
 for productfilename in products:
     print(productfilename)
-    skewer(productfilename, "pmockup5.jpg",[(2001, 582), (2935, 420), (2941, 2024), (2016, 1983)])
+    for i in range(len(mockup_filenames)):
+        skewer (productfilename, mockup_filenames[i], frame_corners[i])
     
 
 
